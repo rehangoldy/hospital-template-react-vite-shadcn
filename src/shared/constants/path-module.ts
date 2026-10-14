@@ -10,7 +10,7 @@ export const modulePath = {
     register: "/register",
   },
   onboarding: {
-    onboarding: "/",
+    onboarding: "/starter",
   },
   management: {
 
