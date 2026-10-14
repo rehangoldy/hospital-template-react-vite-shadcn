@@ -54,18 +54,22 @@ export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd(), "") };
 
   const base = process.env.VITE_APP_URL && process.env.VITE_APP_URL !== "undefined" ? process.env.VITE_APP_URL : "/";
-  const devDockerBase =
-    process.env.VITE_API_URL_EPKS && process.env.VITE_API_URL_EPKS !== "undefined" ? process.env.VITE_API_URL_EPKS : "/";
+  const apiUrl = process.env.VITE_API_URL && process.env.VITE_API_URL !== "undefined" ? process.env.VITE_API_URL : "http://localhost:8000";
+
+  const apiProxy = {
+    "/api": {
+      target: apiUrl,
+      changeOrigin: true,
+      secure: false,
+      rewrite: (path: string) => path.replace(/^\/api/, ""),
+    },
+  };
 
   switch (process.env?.VITE_APP_MODE) {
     case "PRODUCTION":
       return {
         ...defaultConfig,
         base,
-        // drop: ["console", "debugger"],
-        // server: {
-        //   proxy: {};
-        // }
         esbuild: {
           drop: ["console", "debugger"],
         },
@@ -77,18 +81,8 @@ export default defineConfig(({ mode }) => {
         base,
         server: {
           host: "localhost",
-          proxy: {
-            "/api": {
-              target: `${process.env.VITE_API_URL_ETERNNABLIS}`,
-              changeOrigin: true,
-              secure: false,
-              rewrite: (path) => path.replace(/^\/api/, ""),
-            },
-          },
+          proxy: apiProxy,
         },
-        // esbuild: {
-        //   drop: ["console", "debugger"],
-        // },
         build: {
           target: "esnext",
           minify: true,
@@ -99,17 +93,9 @@ export default defineConfig(({ mode }) => {
     case "DEVDOCKER":
       return {
         ...defaultConfig,
-        base: devDockerBase,
-        // drop: ["console", "debugger"],
+        base,
         server: {
-          proxy: {
-            "/api": {
-              target: `${process.env.VITE_API_URL_EPKS}`,
-              changeOrigin: true,
-              secure: false,
-              rewrite: (path) => path.replace(/^\/api/, ""),
-            },
-          },
+          proxy: apiProxy,
         },
         esbuild: {
           drop: ["console", "debugger"],
@@ -126,14 +112,7 @@ export default defineConfig(({ mode }) => {
         ...defaultConfig,
         base,
         server: {
-          proxy: {
-            "/api": {
-              target: `${process.env.VITE_API_URL_EPKS}`,
-              changeOrigin: true,
-              secure: false,
-              // rewrite: (path) => path.replace(/^\/api/, ""),
-            },
-          },
+          proxy: apiProxy,
         },
         esbuild: {
           drop: ["console", "debugger"],
@@ -150,14 +129,7 @@ export default defineConfig(({ mode }) => {
         ...defaultConfig,
         base,
         server: {
-          proxy: {
-            "/api": {
-              target: `${process.env.VITE_API_URL_ETERNNABLIS}`,
-              changeOrigin: true,
-              secure: false,
-              rewrite: (path) => path.replace(/^\/api/, ""),
-            },
-          },
+          proxy: apiProxy,
         },
         esbuild: {
           drop: ["console", "debugger"],

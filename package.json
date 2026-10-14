@@ -1,8 +1,9 @@
 {
-  "name": "eternnablis-v2",
+  "name": "hospital-template-react-vite-shadcn",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

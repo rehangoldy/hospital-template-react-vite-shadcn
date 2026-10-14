@@ -5,13 +5,25 @@
 [![Vite](https://img.shields.io/badge/Vite-7.2-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-Radix_UI-000000?logo=shadcnui&logoColor=white)](https://ui.shadcn.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Standard](https://img.shields.io/badge/Standard-PMK_24%2F2022_%7C_HL7_FHIR-0ea5e9)](https://satusehat.kemkes.go.id/)
 
 Template frontend modern siap pakai untuk **Sistem Informasi Manajemen Rumah Sakit (SIMRS) / Hospital ERP Enterprise**. Dirancang dengan arsitektur modular berskala besar, performa tinggi, desain antarmuka klinis yang ergonomis, serta kesiapan integrasi standar regulasi kesehatan Indonesia (PMK 24/2022 RME, BPJS VClaim, SatuSehat HL7/FHIR, INA-CBG, dan SIPNAP).
 
 ---
 
+## 📸 Pratinjau Antarmuka (Preview)
+
+### ☀️ Mode Terang (Light Mode)
+![SIMRS Medika Dashboard Light Mode](src/assets/img/dashboard-light.png)
+
+### 🌙 Mode Gelap (Dark Mode)
+![SIMRS Medika Dashboard Dark Mode](src/assets/img/dashboard-dark.png)
+
+---
+
 ## 📑 Daftar Isi
+- [Pratinjau Antarmuka](#-pratinjau-antarmuka-preview)
 - [Gambaran Umum](#-gambaran-umum)
 - [Teknologi Utama](#-teknologi-utama)
 - [Daftar Modul & Fitur](#-daftar-modul--fitur)
@@ -245,23 +257,21 @@ Buka browser dan akses alamat lokal yang tampil pada terminal (biasanya `http://
 
 ## ⚙️ Konfigurasi Environment & Proxy API
 
-Berkas konfigurasi `vite.config.ts` telah dilengkapi pengaturan multi-environment dan reverse-proxy bawaan untuk menghindari kendala CORS saat berkomunikasi dengan backend:
+Berkas konfigurasi `vite.config.ts` telah dilengkapi pengaturan reverse-proxy bawaan untuk memudahkan integrasi dan menghindari kendala CORS saat berkomunikasi dengan server backend:
 
 | Variabel `.env` | Nilai Bawaan | Deskripsi |
 |---|---|---|
 | `VITE_APP_URL` | `"/"` | Base URL routing aplikasi (sesuai domain atau sub-path web server) |
 | `VITE_APP_MODE` | `"DEVELOPMENT"` | Mode lingkungan: `DEVELOPMENT`, `DEVDOCKER`, `STAGING`, `PRODUCTION` |
-| `VITE_API_URL_ETERNNABLIS` | `http://localhost:8000` | Target URL backend SIMRS untuk mode `DEVELOPMENT` |
-| `VITE_API_URL_EPKS` | `http://backend-api:8080` | Target URL backend SIMRS untuk mode `DEVDOCKER` / `STAGING` |
+| `VITE_API_URL` | `http://localhost:8000` | Target URL backend server API SIMRS |
 
 ### Cara Kerja Reverse Proxy `/api`
-Saat aplikasi melakukan pemanggilan HTTP seperti:
+Saat aplikasi melakukan pemanggilan HTTP di frontend:
 ```ts
 axios.get("/api/v1/pasien")
 ```
-Server Vite akan secara otomatis meneruskannya ke backend target sesuai `VITE_APP_MODE`:
-- Pada mode `DEVELOPMENT`: dialihkan ke `VITE_API_URL_ETERNNABLIS/v1/pasien`
-- Pada mode `DEVDOCKER`: dialihkan ke `VITE_API_URL_EPKS/v1/pasien`
+Server development Vite akan secara otomatis meneruskannya (*reverse-proxy*) ke target backend yang ditentukan di `VITE_API_URL`:
+- Permintaan `/api/v1/pasien` dialihkan ke `${VITE_API_URL}/v1/pasien` tanpa terhalang isu CORS browser.
 
 ---
 
@@ -468,4 +478,4 @@ Pada terminal proyek, Anda dapat menjalankan skrip-skrip berikut:
 
 ## 📄 Lisensi
 
-Proyek ini dilisensikan di bawah ketentuan lisensi internal rumah sakit / tim pengembang. Anda bebas mengadaptasi, memodifikasi, dan memperluas modul sesuai dengan alur kerja operasional rumah sakit masing-masing.
+Didistribusikan di bawah lisensi terbuka **MIT License**. Lihat berkas [`LICENSE`](LICENSE) untuk informasi hak cipta dan ketentuan penggunaan selengkapnya. Bebas digunakan, diadaptasi, dan dikembangkan baik untuk proyek personal, komersial, maupun institusi rumah sakit.
